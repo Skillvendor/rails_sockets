@@ -22,13 +22,15 @@ class App extends Component {
     }, {
       connected: () => {},
       received: (data) => {
+        console.log('received')
+        console.log(data)
         let chatLogs = this.state.chatLogs;
         chatLogs.push(data);
         this.setState({ chatLogs: chatLogs });
       },
       create: function(chatContent) {
         this.perform('create', {
-          content: chatContent
+          text: chatContent
         });
       }
     });
@@ -38,7 +40,7 @@ class App extends Component {
     return this.state.chatLogs.map((el) => {
       return (
         <li key={`chat_${el.id}`}>
-          <span className='chat-message'>{ el.content }</span>
+          <span className='chat-message'>{ el.text }</span>
           <span className='chat-created-at'>{ el.created_at }</span>
         </li>
       );

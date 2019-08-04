@@ -6,8 +6,10 @@ class ChatChannel < ApplicationCable::Channel
   def unsubscribed; end
 
   def create(opts)
-    ChatMessage.create(
-      content: opts.fetch('content')
-    )
+    chatroom = ChatRoom.find(1)
+    message = chatroom.messages.create(text: opts.fetch('text'), user: User.find(1))
+    ActiveRecord::Base.after_transaction do
+      ChatMessageCreationEventBroadcastJob.perform_later(message)
+    end
   end
 end
